@@ -47,7 +47,7 @@ hist(aux$tsteps, xlab = "Number of steps per day", ylab = "Frequency of days", m
 
 <img src="PA1_template_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
 
-#### 2. The mean and median total number of steps taken per day
+#### 2. The mean and median number of steps taken by date.
 
 
 ```r
@@ -70,6 +70,18 @@ data %>% group_by(date) %>% summarize(means = mean(steps, na.rm = FALSE),medians
 ## 10 2012-10-10 34.4         0
 ## # ... with 51 more rows
 ```
+
+#### 3. Totals for mean and median number of steps taken per day.
+
+
+```r
+data %>% summarise(total_mean = mean(steps, na.rm = TRUE), total_median = median(steps,na.rm = TRUE))
+```
+
+```
+##   total_mean total_median
+## 1    37.3826            0
+```
 ----
 
 ## What is the average daily activity pattern?
@@ -90,7 +102,7 @@ aux <- data %>% group_by(interval) %>% summarize(msteps = mean(steps, na.rm = TR
 plot(aux$interval,aux$msteps,type = "l",ylab = "Average number of steps", xlab = "5-minute intervals")
 ```
 
-<img src="PA1_template_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
+<img src="PA1_template_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
 
 #### 2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
@@ -115,15 +127,14 @@ aux[aux$msteps == max(aux$msteps),]
 
 
 ```r
-NAs <- complete.cases(data)
-sum(!NAs)
+sum(!complete.cases(data))
 ```
 
 ```
 ## [1] 2304
 ```
 
-#### 2. Strategy for filling in all of the missing values in the dataset. Using the mean for the 5-minute interval as integer.
+#### 2. Strategy for filling in all of the missing values in the dataset: Using the mean for the 5-minute interval as integer.
 
 
 ```r
@@ -171,9 +182,9 @@ aux <- dataclean %>% group_by(date) %>% summarize(tsteps = sum(steps))
 hist(aux$tsteps, xlab = "Number of steps per day", ylab = "Frequency of days", main = "")
 ```
 
-<img src="PA1_template_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" />
+<img src="PA1_template_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" />
 
-* #### Mean and median total number of steps taken per day.
+* #### The mean and median number of steps taken by date.
 
 
 ```r
@@ -197,7 +208,19 @@ dataclean %>% group_by(date) %>% summarize(means = mean(steps),medians = median(
 ## # ... with 51 more rows
 ```
 
-> Overall shape of histogram did not change. Peak of the graph increased from just over 25 in the first graph to over 30 in the graph with the NAs filled in. Means of the total number of steps seem to fit in with the rest of the data, although that is not the case with the medians.   
+* #### Totals for mean and median number of steps taken per day.
+
+
+```r
+dataclean %>% summarise(total_mean = mean(steps), total_median = median(steps))
+```
+
+```
+##   total_mean total_median
+## 1   37.32559            0
+```
+
+> Overall shape of histogram did not change. Peak of the graph increased from just over 25 in the first graph to over 30 in the graph with the NAs filled in. Totals for the mean and median did not change significantly.   
 
 ----
 
@@ -247,7 +270,7 @@ final <- rbind.data.frame(dlist$'FALSE',dlist$'TRUE')
 xyplot(msteps ~ interval | wkend ,data = final, type = "l", layout = c(1,2), ylab = "Number of steps", xlab = "Interval")
 ```
 
-<img src="PA1_template_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto;" />
+<img src="PA1_template_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" />
 
 ----
 
