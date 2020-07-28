@@ -5,15 +5,13 @@ output:
     keep_md: yes
 ---
 
-```{r echo=FALSE,warning=FALSE}
-library(knitr)
-opts_chunk$set(echo=TRUE, message=FALSE, warning=FALSE, fig.height = 4, fig.width = 8, fig.align='center')
-```
+
 ## Loading and preprocessing the data
 
 #### 1. Loading packages and data.
 
-```{r}
+
+```r
 library(dplyr)
 library(lubridate)
 library(lattice)
@@ -23,7 +21,8 @@ data <- read.csv(file = "activity.csv")
 
 #### 2. Transforming dates from char to date.
 
-```{r}
+
+```r
 data$date <- as.Date(data$date)
 ```
 ----
@@ -34,20 +33,42 @@ data$date <- as.Date(data$date)
 
 * #### Group data by date and summarize sum of steps for each date.
 
-```{r}
+
+```r
 aux <- data %>% group_by(date) %>% summarize(tsteps = sum(steps, na.rm = FALSE))
 ```
 
 * #### Histogram of the total number of steps taken each day.
 
-```{r}
+
+```r
 hist(aux$tsteps, xlab = "Number of steps per day", ylab = "Frequency of days", main = "")
 ```
 
+<img src="PA1_template_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
+
 #### 2. The mean and median total number of steps taken per day
 
-```{r}
+
+```r
 data %>% group_by(date) %>% summarize(means = mean(steps, na.rm = FALSE),medians = median(steps,  na.rm = FALSE))
+```
+
+```
+## # A tibble: 61 x 3
+##    date        means medians
+##    <date>      <dbl>   <dbl>
+##  1 2012-10-01 NA          NA
+##  2 2012-10-02  0.438       0
+##  3 2012-10-03 39.4         0
+##  4 2012-10-04 42.1         0
+##  5 2012-10-05 46.2         0
+##  6 2012-10-06 53.5         0
+##  7 2012-10-07 38.2         0
+##  8 2012-10-08 NA          NA
+##  9 2012-10-09 44.5         0
+## 10 2012-10-10 34.4         0
+## # ... with 51 more rows
 ```
 ----
 
@@ -57,23 +78,34 @@ data %>% group_by(date) %>% summarize(means = mean(steps, na.rm = FALSE),medians
 
 * #### Calculating mean number of steps taken for each time interval.
 
-```{r}
-aux <- data %>% group_by(interval) %>% summarize(msteps = mean(steps, na.rm = TRUE))
 
+```r
+aux <- data %>% group_by(interval) %>% summarize(msteps = mean(steps, na.rm = TRUE))
 ```
 
 * #### Plotting time series graph.
 
-```{r}
+
+```r
 plot(aux$interval,aux$msteps,type = "l",ylab = "Average number of steps", xlab = "5-minute intervals")
 ```
+
+<img src="PA1_template_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
 
 #### 2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
 * #### Subsetting row that corresponds to maximum average number of steps (interval 835).
 
-```{r}
+
+```r
 aux[aux$msteps == max(aux$msteps),]
+```
+
+```
+## # A tibble: 1 x 2
+##   interval msteps
+##      <int>  <dbl>
+## 1      835   206.
 ```
 ----
 
@@ -81,14 +113,20 @@ aux[aux$msteps == max(aux$msteps),]
 
 #### 1. Total number of missing values in the dataset (i.e. the total number of rows with NAs).
 
-```{r}
+
+```r
 NAs <- complete.cases(data)
 sum(!NAs)
 ```
 
+```
+## [1] 2304
+```
+
 #### 2. Strategy for filling in all of the missing values in the dataset. Using the mean for the 5-minute interval as integer.
 
-```{r}
+
+```r
 dataclean <- data
 for(i in 1:nrow(dataclean)){
     if(is.na(dataclean$steps[i])){
@@ -100,26 +138,63 @@ for(i in 1:nrow(dataclean)){
 
 #### 3. New dataset with the missing data filled in.
 
-```{r}
+
+```r
 head(dataclean,10)
+```
+
+```
+##    steps       date interval
+## 1      1 2012-10-01        0
+## 2      0 2012-10-01        5
+## 3      0 2012-10-01       10
+## 4      0 2012-10-01       15
+## 5      0 2012-10-01       20
+## 6      2 2012-10-01       25
+## 7      0 2012-10-01       30
+## 8      0 2012-10-01       35
+## 9      0 2012-10-01       40
+## 10     1 2012-10-01       45
 ```
 
 #### 4. Histogram of the total number of steps taken each day and the **mean** and **median** total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
 
 * #### Histogram of the total number of steps taken each day.
 
-```{r}
+
+```r
 aux <- dataclean %>% group_by(date) %>% summarize(tsteps = sum(steps))
 ```
 
-```{r}
+
+```r
 hist(aux$tsteps, xlab = "Number of steps per day", ylab = "Frequency of days", main = "")
 ```
 
+<img src="PA1_template_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" />
+
 * #### Mean and median total number of steps taken per day.
 
-```{r}
+
+```r
 dataclean %>% group_by(date) %>% summarize(means = mean(steps),medians = median(steps))
+```
+
+```
+## # A tibble: 61 x 3
+##    date        means medians
+##    <date>      <dbl>   <dbl>
+##  1 2012-10-01 36.9      33.5
+##  2 2012-10-02  0.438     0  
+##  3 2012-10-03 39.4       0  
+##  4 2012-10-04 42.1       0  
+##  5 2012-10-05 46.2       0  
+##  6 2012-10-06 53.5       0  
+##  7 2012-10-07 38.2       0  
+##  8 2012-10-08 36.9      33.5
+##  9 2012-10-09 44.5       0  
+## 10 2012-10-10 34.4       0  
+## # ... with 51 more rows
 ```
 
 > Overall shape of histogram did not change. Peak of the graph increased from just over 25 in the first graph to over 30 in the graph with the NAs filled in. Means of the total number of steps seem to fit in with the rest of the data, although that is not the case with the medians.   
@@ -132,7 +207,8 @@ dataclean %>% group_by(date) %>% summarize(means = mean(steps),medians = median(
 
 * #### Mapping weekends (TRUE) and weekdays (FALSE) to logical vector.
 
-```{r}
+
+```r
 vet <- sapply(data$date,function(e){
         wd <- wday(e)
         if(wd == 1  || wd == 7) TRUE
@@ -141,20 +217,22 @@ vet <- sapply(data$date,function(e){
 
 * #### Adding new variable named wkend containing logical vector as factor. 
 
-```{r}
-data$wkend <- factor(vet)
 
+```r
+data$wkend <- factor(vet)
 ```
 
 * #### Splitting data according to wkend.
 
-```{r}
+
+```r
 dlist <- split(data, data$wkend)
 ```
 
 * #### Calculating mean number of steps per time interval for each dataframe in the list and merging the two.
 
-```{r}
+
+```r
 dlist$'FALSE' <- dlist$'FALSE' %>% group_by(interval) %>% summarize(msteps = mean(steps, na.rm = TRUE))
 dlist$'FALSE' <- cbind.data.frame(dlist$'FALSE',wkend = "weekday")
 dlist$'TRUE' <- dlist$'TRUE' %>% group_by(interval) %>% summarize(msteps = mean(steps, na.rm = TRUE))
@@ -164,9 +242,12 @@ final <- rbind.data.frame(dlist$'FALSE',dlist$'TRUE')
 
 #### 2. Panel plot containing a time series plot of the 5-minute interval (x-axis) and the average number of steps taken (y-axis), averaged across all weekday days or weekend days.
 
-```{r}
+
+```r
 xyplot(msteps ~ interval | wkend ,data = final, type = "l", layout = c(1,2), ylab = "Number of steps", xlab = "Interval")
 ```
+
+<img src="PA1_template_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto;" />
 
 ----
 
