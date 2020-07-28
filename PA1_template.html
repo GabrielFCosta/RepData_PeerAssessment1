@@ -414,11 +414,13 @@ data &lt;- read.csv(file = &quot;activity.csv&quot;)</code></pre>
 ## 10 2012-10-10 34.4         0
 ## # ... with 51 more rows</code></pre>
 </div>
-<div id="totals-for-mean-and-median-number-of-steps-taken-per-day." class="section level4">
-<h4>3. Totals for mean and median number of steps taken per day.</h4>
-<pre class="r"><code>data %&gt;% summarise(total_mean = mean(steps, na.rm = TRUE), total_median = median(steps,na.rm = TRUE))</code></pre>
-<pre><code>##   total_mean total_median
-## 1    37.3826            0</code></pre>
+<div id="mean-and-median-of-total-number-of-steps-taken-per-day." class="section level4">
+<h4>3. Mean and median of total number of steps taken per day.</h4>
+<pre class="r"><code>aux %&gt;% summarise(total_mean = mean(tsteps, na.rm = TRUE), total_median = median(tsteps,na.rm = TRUE))</code></pre>
+<pre><code>## # A tibble: 1 x 2
+##   total_mean total_median
+##        &lt;dbl&gt;        &lt;int&gt;
+## 1     10766.        10765</code></pre>
 <hr />
 </div>
 </div>
@@ -508,13 +510,15 @@ for(i in 1:nrow(dataclean)){
 ## 10 2012-10-10 34.4       0  
 ## # ... with 51 more rows</code></pre>
 <ul>
-<li><h4 id="totals-for-mean-and-median-number-of-steps-taken-per-day.-1">Totals for mean and median number of steps taken per day.</h4></li>
+<li><h4 id="mean-and-median-of-total-number-of-steps-taken-per-day.-1">Mean and median of total number of steps taken per day.</h4></li>
 </ul>
-<pre class="r"><code>dataclean %&gt;% summarise(total_mean = mean(steps), total_median = median(steps))</code></pre>
-<pre><code>##   total_mean total_median
-## 1   37.32559            0</code></pre>
+<pre class="r"><code>aux %&gt;% summarise(total_mean = mean(tsteps), total_median = median(tsteps))</code></pre>
+<pre><code>## # A tibble: 1 x 2
+##   total_mean total_median
+##        &lt;dbl&gt;        &lt;int&gt;
+## 1     10750.        10641</code></pre>
 <blockquote>
-<p>Overall shape of histogram did not change. Peak of the graph increased from just over 25 in the first graph to over 30 in the graph with the NAs filled in. Totals for the mean and median did not change significantly.</p>
+<p>Overall shape of histogram did not change. Peak of the graph increased, from a frequency of just over 25 days in the first graph, to about 35 in the graph with the NAs filled in. Mean total number of steps decreased by 16 steps while median total decreased by 124 steps in the imputed data.</p>
 </blockquote>
 <hr />
 </div>

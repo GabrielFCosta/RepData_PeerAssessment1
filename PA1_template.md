@@ -71,16 +71,18 @@ data %>% group_by(date) %>% summarize(means = mean(steps, na.rm = FALSE),medians
 ## # ... with 51 more rows
 ```
 
-#### 3. Totals for mean and median number of steps taken per day.
+#### 3. Mean and median of total number of steps taken per day.
 
 
 ```r
-data %>% summarise(total_mean = mean(steps, na.rm = TRUE), total_median = median(steps,na.rm = TRUE))
+aux %>% summarise(total_mean = mean(tsteps, na.rm = TRUE), total_median = median(tsteps,na.rm = TRUE))
 ```
 
 ```
+## # A tibble: 1 x 2
 ##   total_mean total_median
-## 1    37.3826            0
+##        <dbl>        <int>
+## 1     10766.        10765
 ```
 ----
 
@@ -208,19 +210,21 @@ dataclean %>% group_by(date) %>% summarize(means = mean(steps),medians = median(
 ## # ... with 51 more rows
 ```
 
-* #### Totals for mean and median number of steps taken per day.
+* #### Mean and median of total number of steps taken per day.
 
 
 ```r
-dataclean %>% summarise(total_mean = mean(steps), total_median = median(steps))
+aux %>% summarise(total_mean = mean(tsteps), total_median = median(tsteps))
 ```
 
 ```
+## # A tibble: 1 x 2
 ##   total_mean total_median
-## 1   37.32559            0
+##        <dbl>        <int>
+## 1     10750.        10641
 ```
 
-> Overall shape of histogram did not change. Peak of the graph increased from just over 25 in the first graph to over 30 in the graph with the NAs filled in. Totals for the mean and median did not change significantly.   
+> Overall shape of histogram did not change. Peak of the graph increased, from a frequency of just over 25 days in the first graph, to about 35 in the graph with the NAs filled in. Mean total number of steps decreased by 16 steps while median total decreased by 124 steps in the imputed data.   
 
 ----
 
